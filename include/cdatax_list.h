@@ -6,25 +6,25 @@
 #include <assert.h>
 
 #define cdatax_list_new(_DataType)\
-	(CDATAX_LIST*)__cdatax_list_new__(sizeof(_DataType))
+	(CDATAX_LIST*)internal_cdatax_list_new(sizeof(_DataType))
 
 #define cdatax_list_delete(_List)\
-	__cdatax_list_delete__(_List)
+	internal_cdatax_list_delete(_List)
 
 #define cdatax_list_insert(_List, _Type, _Data, _Index)\
-	*((_Type*)__cdatax_list_insert__(_List, sizeof(_Type), _Index)) = _Data
+	*((_Type*)internal_cdatax_list_insert(_List, sizeof(_Type), _Index)) = _Data
 
 #define cdatax_list_append(_List, _Type, _Data)\
-	*((_Type*)__cdatax_list_insert__(_List, sizeof(_Type), _List->count)) = _Data
+	*((_Type*)internal_cdatax_list_insert(_List, sizeof(_Type), _List->count)) = _Data
 
 #define cdatax_list_at(_List, _Type, _Index)\
-	(*((_Type*)__cdatax_list_at__(_List, sizeof(_Type), _Index)))
+	(*((_Type*)internal_cdatax_list_at(_List, sizeof(_Type), _Index)))
 
 #define cdatax_list_first(_List, _Type)\
-	(*((_Type*)__cdatax_list_at__(_List, sizeof(_Type), 0)))
+	(*((_Type*)internal_cdatax_list_at(_List, sizeof(_Type), 0)))
 
 #define cdatax_list_last(_List, _Type)\
-	(*((_Type*)__cdatax_list_at__(_List, sizeof(_Type), _List->count - 1)))
+	(*((_Type*)internal_cdatax_list_at(_List, sizeof(_Type), _List->count - 1)))
 
 #define cdatax_list_foreach(_Type, _pData, _List)\
 	if(_List->dataLen == sizeof(_Type))\
@@ -48,10 +48,10 @@ extern "C"
 {
 #endif
 
-	CDATAX_LIST* __cdatax_list_new__(uint32_t dataLen);
-	void __cdatax_list_delete__(CDATAX_LIST* list);
-	void* __cdatax_list_insert__(CDATAX_LIST* list, uint32_t dataLen, uint32_t index);
-	void* __cdatax_list_at__(CDATAX_LIST* list, uint32_t dataLen, uint32_t index);
+	CDATAX_LIST* internal_cdatax_list_new(uint32_t dataLen);
+	void internal_cdatax_list_delete(CDATAX_LIST* list);
+	void* internal_cdatax_list_insert(CDATAX_LIST* list, uint32_t dataLen, uint32_t index);
+	void* internal_cdatax_list_at(CDATAX_LIST* list, uint32_t dataLen, uint32_t index);
 
 #ifdef __cplusplus
 }

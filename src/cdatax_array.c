@@ -1,7 +1,7 @@
 #include "cdatax_array.h"
 #include <assert.h>
 
-CDATAX_ARRAY *__cdatax_array_new__(uint32_t dataLen)
+CDATAX_ARRAY *internal_cdatax_array_new(uint32_t dataLen)
 {
 	CDATAX_ARRAY* array = malloc(sizeof(CDATAX_ARRAY));
     memcpy((void*)&array->dataLen, &dataLen, sizeof(uint32_t));
@@ -13,7 +13,7 @@ CDATAX_ARRAY *__cdatax_array_new__(uint32_t dataLen)
     return array;
 }
 
-void __cdatax_array_delete__(CDATAX_ARRAY *array)
+void internal_cdatax_array_delete(CDATAX_ARRAY *array)
 {
     if(array == NULL)
         return;
@@ -21,7 +21,7 @@ void __cdatax_array_delete__(CDATAX_ARRAY *array)
     free(array);
 }
 
-void _cdarax_array_expand(CDATAX_ARRAY *array)
+void internal_cdarax_array_expand(CDATAX_ARRAY *array)
 {
     if(array->count == array->reserve_size)
     {
@@ -31,17 +31,17 @@ void _cdarax_array_expand(CDATAX_ARRAY *array)
         assert(array->dataArray);
     }
 }
-void* __cdatax_array_append__(CDATAX_ARRAY *array, uint32_t dataLen)
+void* internal_cdatax_array_append(CDATAX_ARRAY *array, uint32_t dataLen)
 {
     assert(array && dataLen == array->dataLen);
-    _cdarax_array_expand(array);
+    internal_cdarax_array_expand(array);
     void* data = (char*)array->dataArray + dataLen * array->count;
     dataLen = array->count + 1;
     memcpy((void*)&array->count, &dataLen, sizeof(uint32_t));
     return data; 
 }
 
-void *__cdatax_array_at__(CDATAX_ARRAY *array, uint32_t dataLen, uint32_t index)
+void *internal_cdatax_array_at(CDATAX_ARRAY *array, uint32_t dataLen, uint32_t index)
 {
     assert(array && dataLen == array->dataLen && index < array->count);
     return (char*)array->dataArray + dataLen * index;

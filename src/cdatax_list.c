@@ -1,6 +1,6 @@
 #include "cdatax_list.h"
 
-CDATAX_LIST *__cdatax_list_new__(uint32_t dataLen)
+CDATAX_LIST *internal_cdatax_list_new(uint32_t dataLen)
 {
 	assert(dataLen > 0);
     CDATAX_LIST* list = calloc(1, sizeof(CDATAX_LIST));
@@ -8,7 +8,7 @@ CDATAX_LIST *__cdatax_list_new__(uint32_t dataLen)
     return list;
 }
 
-void __cdatax_list_delete__(CDATAX_LIST *list)
+void internal_cdatax_list_delete(CDATAX_LIST *list)
 {
 	if(list == NULL)
 		return;
@@ -24,7 +24,7 @@ void __cdatax_list_delete__(CDATAX_LIST *list)
 	free(list);
 }
 
-void *__cdatax_list_at__(CDATAX_LIST *list, uint32_t dataLen, uint32_t index)
+void *internal_cdatax_list_at(CDATAX_LIST *list, uint32_t dataLen, uint32_t index)
 {
 	assert(list && dataLen == list->dataLen && index < list->count);
 	struct _CDARAX_LIST_NODE_* node = NULL;
@@ -45,7 +45,7 @@ void *__cdatax_list_at__(CDATAX_LIST *list, uint32_t dataLen, uint32_t index)
     return node->data;
 }
 
-void* __cdatax_list_insert__(CDATAX_LIST *list, uint32_t dataLen, uint32_t index)
+void* internal_cdatax_list_insert(CDATAX_LIST *list, uint32_t dataLen, uint32_t index)
 {
     assert(list && dataLen == list->dataLen && index <= list->count);
 	struct _CDARAX_LIST_NODE_** node = NULL;
