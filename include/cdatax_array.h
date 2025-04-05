@@ -5,20 +5,23 @@
 #include <memory.h>
     
 typedef struct{
-    void* dataArray;
-    const uint32_t dataLen;
-    const uint32_t reserve_size;
+    void* const dataArray;
+    const size_t dataLen;
+    const uint32_t reserveSize;
     const uint32_t count;
 }CDATAX_ARRAY;
 
 #define cdatax_array_new(_Type)\
-    (CDATAX_ARRAY*)internal_cdatax_array_new(sizeof(_Type))
+    (CDATAX_ARRAY*)internal_cdatax_array_new(sizeof(_Type), (uint32_t)4)
+
+#define cdatax_array_newex(_Type, _ReserveSize)\
+    (CDATAX_ARRAY*)internal_cdatax_array_new(sizeof(_Type), (uint32_t)_ReserveSize)
 
 #define cdatax_array_delete(_Array)\
     internal_cdatax_array_delete(_Array)
 
 #define cdatax_array_append(_Array, _Type, _Data)\
-    (*(_Type*)internal_cdatax_array_append(_Array, sizeof(_Type)) = _Data)
+    (*(_Type*)internal_cdatax_array_append(_Array, sizeof(_Type))) = _Data
 
 #define cdatax_array_at(_Array, _Type, _Index)\
     (*(_Type*)internal_cdatax_array_at(_Array, sizeof(_Type), _Index))
@@ -39,16 +42,16 @@ for(int i = 0; i < _Array->count; i++)
 #define cdatax_array_foreach(_Type, _pData, _Array)\
     if(_Array->dataLen == sizeof(_Type))\
         for(uint32_t _index_ = 0; _index_ < _Array->count; ++_index_)\
-            for(_Type* _pData = (_Type*)_Array->dataArray + _index_; _pData != NULL; _pData = NULL)
+            for(_Type* _pData = &(((_Type*)_Array->dataArray)[_index_]); _pData != NULL; _pData = NULL)
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-    CDATAX_ARRAY* internal_cdatax_array_new(uint32_t dataLen);
-    void internal_cdatax_array_delete(CDATAX_ARRAY* array);
-    void* internal_cdatax_array_append(CDATAX_ARRAY* array, uint32_t dataLen);
-    void* internal_cdatax_array_at(CDATAX_ARRAY* array, uint32_t dataLen, uint32_t index);
+    CDATAX_ARRAY* internal_cdatax_array_new(const size_t dataLen, const uint32_t reserveSize);
+    void internal_cdatax_array_delete(const CDATAX_ARRAY* array);
+    void* internal_cdatax_array_append(CDATAX_ARRAY* array, const size_t dataLen);
+    void* internal_cdatax_array_at(const CDATAX_ARRAY* array, const size_t dataLen, const uint32_t index);
 #ifdef __cplusplus
 }
 #endif

@@ -3,7 +3,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <memory.h>
-#include <assert.h>
 
 #define cdatax_list_new(_DataType)\
 	(CDATAX_LIST*)internal_cdatax_list_new(sizeof(_DataType))
@@ -32,14 +31,14 @@
 			for(_Type* _pData = (_Type*)_node_->data; _pData != NULL; _pData = NULL)
 
 struct _CDARAX_LIST_NODE_{
-	void* data; 
+	void* const data; 
 	struct _CDARAX_LIST_NODE_* previous;
 	struct _CDARAX_LIST_NODE_* next;
 };
 typedef struct{
 	struct _CDARAX_LIST_NODE_* const head;
 	struct _CDARAX_LIST_NODE_* const tail;
-    const uint32_t dataLen;
+    const size_t dataLen;
 	const uint32_t count;
 }CDATAX_LIST;
 
@@ -48,10 +47,10 @@ extern "C"
 {
 #endif
 
-	CDATAX_LIST* internal_cdatax_list_new(uint32_t dataLen);
-	void internal_cdatax_list_delete(CDATAX_LIST* list);
-	void* internal_cdatax_list_insert(CDATAX_LIST* list, uint32_t dataLen, uint32_t index);
-	void* internal_cdatax_list_at(CDATAX_LIST* list, uint32_t dataLen, uint32_t index);
+	CDATAX_LIST* internal_cdatax_list_new(size_t dataLen);
+	void internal_cdatax_list_delete(const CDATAX_LIST* list);
+	void* internal_cdatax_list_insert(CDATAX_LIST* list, const size_t dataLen, const uint32_t index);
+	void* internal_cdatax_list_at(const CDATAX_LIST* list, const size_t dataLen, uint32_t index);
 
 #ifdef __cplusplus
 }

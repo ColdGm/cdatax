@@ -1,14 +1,15 @@
 #include "cdatax_list.h"
+#include <assert.h>
 
-CDATAX_LIST *internal_cdatax_list_new(uint32_t dataLen)
+CDATAX_LIST *internal_cdatax_list_new(const size_t dataLen)
 {
 	assert(dataLen > 0);
     CDATAX_LIST* list = calloc(1, sizeof(CDATAX_LIST));
-	memcpy((void*)&list->dataLen, &dataLen, sizeof(uint32_t));
+	*(size_t*)&list->dataLen = dataLen;
     return list;
 }
 
-void internal_cdatax_list_delete(CDATAX_LIST *list)
+void internal_cdatax_list_delete(const CDATAX_LIST *list)
 {
 	if(list == NULL)
 		return;
@@ -21,10 +22,10 @@ void internal_cdatax_list_delete(CDATAX_LIST *list)
 		free(current->data);
 		free((void*)current);
 	}
-	free(list);
+	free((void*)list);
 }
 
-void *internal_cdatax_list_at(CDATAX_LIST *list, uint32_t dataLen, uint32_t index)
+void *internal_cdatax_list_at(const CDATAX_LIST *list, const size_t dataLen, const uint32_t index)
 {
 	assert(list && dataLen == list->dataLen && index < list->count);
 	struct _CDARAX_LIST_NODE_* node = NULL;
@@ -45,7 +46,7 @@ void *internal_cdatax_list_at(CDATAX_LIST *list, uint32_t dataLen, uint32_t inde
     return node->data;
 }
 
-void* internal_cdatax_list_insert(CDATAX_LIST *list, uint32_t dataLen, uint32_t index)
+void* internal_cdatax_list_insert(CDATAX_LIST *list, const size_t dataLen, uint32_t index)
 {
     assert(list && dataLen == list->dataLen && index <= list->count);
 	struct _CDARAX_LIST_NODE_** node = NULL;
@@ -64,7 +65,7 @@ void* internal_cdatax_list_insert(CDATAX_LIST *list, uint32_t dataLen, uint32_t 
 			node = &(*node)->previous;
 	}
 	struct _CDARAX_LIST_NODE_* newNode = malloc(sizeof(struct _CDARAX_LIST_NODE_));
-	newNode->data = malloc(dataLen);
+	*(void**)&newNode->data = malloc(dataLen);
 	if(list->count > 0)
 	{
 		if(index == 0)
@@ -79,7 +80,7 @@ void* internal_cdatax_list_insert(CDATAX_LIST *list, uint32_t dataLen, uint32_t 
 			(*node)->next = newNode;
 			newNode->previous = (*node);
 			newNode->next = NULL;
-			memcpy((void*)&list->tail, &newNode, sizeof(void*));
+			*(struct _CDARAX_LIST_NODE_**)&list->tail = newNode;
 		}
 		else
 		{
@@ -93,9 +94,8 @@ void* internal_cdatax_list_insert(CDATAX_LIST *list, uint32_t dataLen, uint32_t 
 		newNode->previous = NULL;
 		newNode->next = NULL;
 		*node = newNode;
-		memcpy((void*)&list->tail, &newNode, sizeof(void*));
+		*(struct _CDARAX_LIST_NODE_**)&list->tail = newNode;
 	}
-	dataLen = list->count + 1;
-	memcpy((void*)&list->count, &dataLen, sizeof(uint32_t));
+	++*(uint32_t*)&list->count;
     return newNode->data;
 }
