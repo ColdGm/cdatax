@@ -9,7 +9,6 @@ typedef struct{
     const uint32_t dataLen;
     const uint32_t reserveSize;
     const uint32_t count;
-    const uint32_t current;
 }CDATAX_STACK;
 
 #define cdatax_stack_new(_Type)\

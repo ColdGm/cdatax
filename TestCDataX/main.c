@@ -6,6 +6,7 @@
 #include "cdatax_array.h"
 #include "cdatax_list.h"
 #include "cdatax_stack.h"
+#include "cdatax_queue.h"
 
 struct MyStruct
 {
@@ -16,12 +17,14 @@ struct MyStruct
 void testArray();
 void testList();
 void testStack();
+void testQueue();
 
 int main(int argc, char** argv)
 {
-	testArray();
-	testList();
+	//testArray();
+	//testList();
 	testStack();
+	testQueue();
 	return 0;
 }
 
@@ -43,7 +46,9 @@ void testArray()
 	cdatax_array_foreach(double, it, array)
 		printf("%lf ", *it);
 	printf("\n");
-	printf("first=%lf, last=%lf\n", cdatax_array_first(array, double), cdatax_array_last(array, double));
+	printf("count=%d, first=%lf, last=%lf\n", array->count
+		, cdatax_array_first(array, double)
+		, cdatax_array_last(array, double));
 	printf("\n");
 	cdatax_array_delete(array);
 }
@@ -84,4 +89,27 @@ void testStack()
 	}
 	printf("stack count: %d\n", stack->count);
 	cdatax_stack_delete(stack);
+}
+
+void testQueue()
+{
+	//////////////////////////// 队列测试
+	printf("//////////////////////////// 队列测试\n");
+	CDATAX_QUEUE* queue = cdatax_queue_new(float);
+	for(int i=0; i<50; ++i)
+	{
+		cdatax_queue_enqueue(queue, float, i / 1.0f);
+		if(i && i % 10 == 0)
+		{
+			for(int j=0; j<5; ++j)
+			{
+				printf("%f ", cdatax_queue_dequeue(queue, float));
+			}
+			printf("\n\tqueue count: %d\tfont:%f\tback:%f\n", queue->count
+				, cdatax_queue_font(queue, float), cdatax_queue_back(queue, float));
+		}
+	}
+	printf("\n\nqueue count: %d, queue font:%f\tqueue back:%f\n", queue->count
+		, cdatax_queue_font(queue, float), cdatax_queue_back(queue, float));
+	cdatax_queue_delete(queue);
 }

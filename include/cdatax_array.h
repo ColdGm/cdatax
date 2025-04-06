@@ -30,7 +30,7 @@ typedef struct{
     (*(_Type*)internal_cdatax_array_at(_Array, sizeof(_Type), 0))
 
 #define cdatax_array_last(_Array, _Type)\
-    (*(_Type*)internal_cdatax_array_at(_Array, sizeof(_Type), _Array->count ? _Array->count - 1 : 0))
+    (*(_Type*)internal_cdatax_array_at(_Array, sizeof(_Type), _Array->count - 1))
 
 /*
 ÍÆ¼ö

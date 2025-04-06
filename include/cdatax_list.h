@@ -47,7 +47,7 @@ extern "C"
 {
 #endif
 
-	CDATAX_LIST* internal_cdatax_list_new(size_t dataLen);
+	CDATAX_LIST* internal_cdatax_list_new(const size_t dataLen);
 	void internal_cdatax_list_delete(const CDATAX_LIST* list);
 	void* internal_cdatax_list_insert(CDATAX_LIST* list, const size_t dataLen, const uint32_t index);
 	void* internal_cdatax_list_at(const CDATAX_LIST* list, const size_t dataLen, uint32_t index);
